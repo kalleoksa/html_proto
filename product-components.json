@@ -1,0 +1,213 @@
+{
+  "description": "Components used on the Product / view page. Each entry defines markup pattern, variants, token references, and accessibility requirements.",
+  "components": {
+
+    "ImageGallery": {
+      "description": "Primary product image with thumbnail strip. Controlled by active_image_index state.",
+      "slots": {
+        "primary_image": "Large img element — fills column width",
+        "thumbnail_strip": "Row of small button-wrapped images"
+      },
+      "variants": ["single (no strip)", "multi (with strip)"],
+      "tokens": [
+        "--radius-surface",
+        "--color-border-default",
+        "--color-action-default (active thumbnail ring)",
+        "--space-layout-gap"
+      ],
+      "accessibility": [
+        "primary img has descriptive alt from product.images[n].alt",
+        "each thumbnail is a <button type='button'> with aria-label='View image N'",
+        "active thumbnail has aria-pressed='true'"
+      ]
+    },
+
+    "ProductMeta": {
+      "description": "Vendor name, product name, tagline, and badge row. Top of the summary column.",
+      "slots": {
+        "vendor": "Small muted text above the title",
+        "name": "H1 — largest heading on page",
+        "tagline": "Secondary text below name",
+        "badges": "Inline row of Badge components"
+      },
+      "tokens": [
+        "--font-size-heading-lg (name)",
+        "--font-size-body-sm (vendor)",
+        "--font-size-body (tagline)",
+        "--color-text-primary",
+        "--color-text-secondary",
+        "--space-layout-gap"
+      ],
+      "accessibility": [
+        "name is H1 — one per page",
+        "badges are decorative spans, not interactive"
+      ]
+    },
+
+    "Badge": {
+      "description": "Small label indicating product status. Reused from base design system.",
+      "variants": {
+        "sale": "danger intent",
+        "new": "success intent",
+        "sold_out": "default intent",
+        "best_seller": "default intent",
+        "staff_pick": "success intent"
+      },
+      "tokens": [
+        "--badge-* from base system"
+      ],
+      "accessibility": [
+        "decorative — no role required",
+        "if sole indicator of a critical state (e.g. sold_out), pair with text elsewhere"
+      ]
+    },
+
+    "PriceBlock": {
+      "description": "Displays regular price, optional sale price, and optional variant delta.",
+      "slots": {
+        "sale_price": "Large, prominent — shown when product.price.sale is not null",
+        "regular_price": "Struck through when sale is active; primary when no sale",
+        "delta": "Small inline label e.g. '+ $20' shown when selected variant has price_delta"
+      },
+      "variants": ["regular", "on-sale"],
+      "tokens": [
+        "--font-size-heading-md (sale price)",
+        "--font-size-body (regular price)",
+        "--font-size-body-sm (delta)",
+        "--color-danger-default (sale price color)",
+        "--color-text-secondary (struck regular price)",
+        "--color-text-primary (regular price when no sale)"
+      ],
+      "accessibility": [
+        "struck price has aria-label='Regular price $X' to avoid confusing screen readers",
+        "sale price has aria-label='Sale price $X'"
+      ]
+    },
+
+    "VariantSelector": {
+      "description": "Radio-button group for selecting a product variant (e.g. board length). One axis only per this recipe.",
+      "slots": {
+        "legend": "Axis label e.g. 'Length (cm)'",
+        "options": "One VariantOption per variant"
+      },
+      "sub_components": {
+        "VariantOption": {
+          "states": ["default", "selected", "out-of-stock"],
+          "markup": "<input type='radio'> paired with <label>",
+          "tokens": [
+            "--color-action-default (selected border/ring)",
+            "--color-border-default (default border)",
+            "--color-text-disabled (out-of-stock label)",
+            "--color-surface-subtle (out-of-stock background)",
+            "--radius-component"
+          ],
+          "out_of_stock_treatment": "visually muted + diagonal strikethrough line; input disabled; label appends '(sold out)' for screen readers"
+        }
+      },
+      "tokens": [
+        "--font-size-body-sm (legend)",
+        "--font-weight-medium (legend)",
+        "--primitive-space-2 (gap between options)"
+      ],
+      "accessibility": [
+        "wrapped in <fieldset>",
+        "axis label is <legend>",
+        "each option is <input type='radio'> with matching <label for>",
+        "disabled options have disabled attribute and aria-disabled='true'"
+      ]
+    },
+
+    "AddToCart": {
+      "description": "Primary CTA button. Full width on mobile, full width in summary column on desktop.",
+      "variants": ["active", "disabled (no variant selected)", "disabled (out of stock)"],
+      "tokens": [
+        "--btn--filled--accent tokens from base system",
+        "--space-component-padding-lg (larger hit area for primary CTA)"
+      ],
+      "accessibility": [
+        "type='button'",
+        "when disabled: aria-disabled='true', aria-describedby points to reason text",
+        "do not use HTML disabled attribute alone — preserves focus for keyboard users"
+      ]
+    },
+
+    "SoldOutNotice": {
+      "description": "Replaces AddToCart when entire product is out of stock. Informs user and optionally offers notify action.",
+      "slots": {
+        "message": "'This product is currently out of stock'",
+        "action": "Optional ghost button: 'Notify me when available'"
+      },
+      "tokens": [
+        "--color-text-secondary",
+        "--color-surface-subtle",
+        "--radius-component"
+      ],
+      "accessibility": [
+        "role='status' on the notice container"
+      ]
+    },
+
+    "Tabs": {
+      "description": "Tabbed content area for description, features, and specs. Below the fold.",
+      "slots": {
+        "tablist": "Row of Tab buttons",
+        "tabpanels": "One panel per tab, only active is visible"
+      },
+      "tokens": [
+        "--color-action-default (active tab indicator)",
+        "--color-border-default (tab strip border)",
+        "--color-text-primary (active tab label)",
+        "--color-text-secondary (inactive tab label)",
+        "--font-size-body",
+        "--font-weight-medium (active tab)"
+      ],
+      "accessibility": [
+        "role='tablist' on container",
+        "role='tab' + aria-selected + aria-controls on each tab button",
+        "role='tabpanel' + aria-labelledby on each panel",
+        "inactive panels: hidden attribute (not just display:none via CSS)"
+      ]
+    },
+
+    "FeatureList": {
+      "description": "Unordered list of product feature strings.",
+      "tokens": [
+        "--font-size-body",
+        "--line-height-body",
+        "--color-text-secondary",
+        "--primitive-space-2 (list gap)"
+      ],
+      "accessibility": [
+        "rendered as <ul> with <li> items — no special roles needed"
+      ]
+    },
+
+    "SpecTable": {
+      "description": "Two-column table of label/value spec pairs.",
+      "tokens": [
+        "--font-size-body-sm",
+        "--color-border-default (row dividers)",
+        "--color-text-secondary (labels)",
+        "--color-text-primary (values)"
+      ],
+      "accessibility": [
+        "<table> with <th scope='row'> for spec labels",
+        "caption is visually hidden: 'Product specifications'"
+      ]
+    },
+
+    "RichText": {
+      "description": "Prose content area. Renders product.description with basic typographic styles.",
+      "tokens": [
+        "--font-size-body",
+        "--line-height-body",
+        "--color-text-secondary",
+        "--space-layout-gap (paragraph gap)"
+      ],
+      "accessibility": [
+        "if content is HTML, sanitize before render",
+        "no role required — is plain prose"
+      ]
+    }
+  }
+}

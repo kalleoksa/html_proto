@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Powder Ghost 2025 — Arcturus Boards</title>
+  <link rel="stylesheet" href="tokens.css">
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-family-base);
+      font-size: var(--font-size-body);
+      color: var(--color-text-primary);
+      background: var(--color-surface-page);
+      line-height: var(--line-height-body);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Site nav ── */
+    .site-nav {
+      height: 3.5rem;
+      border-bottom: 1px solid var(--color-border-default);
+      padding: 0 var(--space-inset-xl);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: var(--color-surface-page);
+      z-index: 10;
+    }
+    .site-nav__logo {
+      font-size: var(--font-size-heading-sm);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-primary);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .site-nav__links {
+      display: flex;
+      gap: var(--space-layout-gap-lg);
+      list-style: none;
+    }
+    .site-nav__links a {
+      font-size: var(--font-size-body-sm);
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+    .site-nav__links a:hover { color: var(--color-text-primary); }
+    .site-nav__links a:focus-visible { outline: 2px solid var(--color-action-default); outline-offset: 2px; border-radius: var(--radius-sm); }
+
+    /* ── Layout ── */
+    .layout-product {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 var(--space-inset-xl) var(--space-inset-3xl);
+    }
+
+    .layout-product__main {
+      display: grid;
+      grid-template-columns: 55fr 45fr;
+      gap: var(--space-inset-2xl);
+      align-items: start;
+    }
+
+    .layout-product__gallery-col {
+      position: sticky;
+      top: calc(3.5rem + var(--space-layout-gap-lg));
+    }
+
+    .layout-product__below {
+      margin-top: var(--space-section-gap);
+      padding-top: var(--space-section-gap);
+      border-top: 1px solid var(--color-border-default);
+    }
+
+    @media (max-width: 768px) {
+      .site-nav { padding: 0 var(--space-layout-gap); }
+      .site-nav__links { display: none; }
+      .layout-product { padding: 0 var(--space-layout-gap) var(--space-inset-2xl); }
+      .layout-product__main { grid-template-columns: 1fr; gap: var(--space-layout-gap-lg); }
+      .layout-product__gallery-col { position: static; }
+    }
+
+    /* ── Breadcrumb ── */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: var(--space-gap-sm);
+      padding: var(--space-gap-lg) 0;
+      font-size: var(--font-size-body-sm);
+    }
+    .breadcrumb a {
+      color: var(--color-text-tertiary);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+    .breadcrumb a:hover { color: var(--color-text-primary); }
+    .breadcrumb a:focus-visible { outline: 2px solid var(--color-action-default); outline-offset: 2px; border-radius: var(--radius-sm); }
+    .breadcrumb__sep { color: var(--color-border-strong); user-select: none; }
+    .breadcrumb__current { color: var(--color-text-secondary); }
+
+    /* ── ImageGallery ── */
+    .gallery__primary {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--gallery-radius);
+      overflow: hidden;
+      background: var(--color-surface-muted);
+    }
+    .gallery__primary img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery__strip {
+      display: flex;
+      gap: var(--space-gap-sm);
+      margin-top: var(--space-gap-md);
+    }
+    .gallery__thumb {
+      width: var(--gallery-thumb-size);
+      height: var(--gallery-thumb-size);
+      border-radius: var(--gallery-thumb-radius);
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+      background: var(--color-surface-muted);
+      padding: 0;
+      flex-shrink: 0;
+      transition: border-color var(--transition-fast);
+    }
+    .gallery__thumb img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .gallery__thumb:hover { border-color: var(--color-border-strong); }
+    .gallery__thumb--active { border-color: var(--color-action-default) !important; }
+    .gallery__thumb:focus-visible { outline: 2px solid var(--color-action-default); outline-offset: 2px; }
+
+    /* ── Product summary (right col) ── */
+    .product-summary {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-gap-lg);
+      padding-top: var(--space-gap-sm);
+    }
+
+    /* ── ProductMeta ── */
+    .product-meta { display: flex; flex-direction: column; gap: var(--space-gap-sm); }
+    .product-meta__vendor {
+      font-size: var(--font-size-body-sm);
+      color: var(--color-text-tertiary);
+      font-weight: var(--font-weight-medium);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .product-meta__name {
+      font-size: var(--font-size-heading-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-primary);
+      line-height: var(--line-height-heading);
+      letter-spacing: -0.025em;
+    }
+    .product-meta__tagline {
+      font-size: var(--font-size-body);
+      color: var(--color-text-secondary);
+      font-style: italic;
+      margin-top: var(--space-gap-xs);
+    }
+    .product-meta__badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-gap-sm);
+      margin-top: var(--space-gap-xs);
+    }
+
+    /* ── Badge ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--badge-padding);
+      border-radius: var(--badge-radius);
+      font-size: var(--badge-font-size);
+      font-weight: var(--badge-font-weight);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge--sale        { background: var(--color-danger-surface);  color: var(--color-danger-text); }
+    .badge--new         { background: var(--color-success-surface); color: var(--color-success-text); }
+    .badge--sold_out    { background: var(--color-surface-muted);   color: var(--color-text-tertiary); }
+    .badge--best_seller { background: var(--color-warning-surface); color: var(--color-warning-text); }
+    .badge--staff_pick  { background: var(--color-action-subtle);   color: var(--color-action-text-on-light); }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: var(--color-border-default); }
+
+    /* ── PriceBlock ── */
+    .price-block {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: var(--space-gap-md);
+    }
+    .price-block__sale {
+      font-size: var(--price-sale-size);
+      font-weight: var(--font-weight-bold);
+      color: var(--price-sale-color);
+      letter-spacing: -0.025em;
+      line-height: 1;
+    }
+    .price-block__regular {
+      font-size: var(--price-regular-size);
+      font-weight: var(--font-weight-bold);
+      color: var(--price-regular-color);
+      letter-spacing: -0.025em;
+      line-height: 1;
+    }
+    .price-block__regular--struck {
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-regular);
+      color: var(--price-struck-color);
+      text-decoration: line-through;
+    }
+    .price-block__delta {
+      font-size: var(--price-delta-size);
+      color: var(--price-delta-color);
+      background: var(--color-surface-muted);
+      border: 1px solid var(--color-border-default);
+      padding: 2px var(--space-gap-sm);
+      border-radius: var(--radius-sm);
+    }
+
+    /* ── VariantSelector ── */
+    .variant-selector {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-gap-md);
+      border: none;
+      padding: 0;
+    }
+    .variant-selector__legend {
+      font-size: var(--font-size-body-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text-primary);
+    }
+    .variant-selector__legend-note {
+      font-weight: var(--font-weight-regular);
+      color: var(--color-text-secondary);
+    }
+    .variant-selector__options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-gap-sm);
+      list-style: none;
+    }
+    .variant-option { position: relative; }
+    .variant-option__input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }
+    .variant-option__label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: var(--variant-option-size);
+      height: var(--variant-option-size);
+      padding: 0 var(--space-gap-md);
+      border: var(--variant-option-border);
+      border-radius: var(--variant-option-radius);
+      background: var(--variant-option-bg);
+      font-size: var(--font-size-body-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-primary);
+      cursor: pointer;
+      transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+      user-select: none;
+      white-space: nowrap;
+    }
+    .variant-option__label:hover { border-color: var(--color-border-strong); }
+    .variant-option__input:checked + .variant-option__label {
+      border: var(--variant-option-border-selected);
+      color: var(--color-action-default);
+      font-weight: var(--font-weight-semibold);
+    }
+    .variant-option__input:focus-visible + .variant-option__label {
+      outline: 2px solid var(--color-action-default);
+      outline-offset: 2px;
+    }
+    /* Out of stock */
+    .variant-option--oos .variant-option__label {
+      background: var(--variant-option-bg-oos);
+      color: var(--variant-option-color-oos);
+      cursor: not-allowed;
+      position: relative;
+      overflow: hidden;
+    }
+    .variant-option--oos .variant-option__label::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom right,
+        transparent calc(50% - 0.75px),
+        var(--color-border-strong) calc(50% - 0.75px),
+        var(--color-border-strong) calc(50% + 0.75px),
+        transparent calc(50% + 0.75px)
+      );
+    }
+    .variant-option--oos .variant-option__input:checked + .variant-option__label {
+      border: var(--variant-option-border);
+      color: var(--variant-option-color-oos);
+    }
+
+    .oos-inline {
+      font-size: var(--font-size-body-sm);
+      color: var(--color-danger-default);
+      display: none;
+    }
+    .oos-inline--visible { display: block; }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-gap-sm);
+      border-radius: var(--btn-radius);
+      font-size: var(--btn-font-size);
+      font-weight: var(--btn-font-weight);
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: background var(--btn-transition), border-color var(--btn-transition), color var(--btn-transition);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+    }
+    .btn:focus-visible { outline: 2px solid var(--color-action-default); outline-offset: 2px; }
+
+    .btn--filled-accent {
+      background: var(--color-action-default);
+      color: var(--color-action-text);
+      padding: var(--btn-padding-lg);
+    }
+    .btn--filled-accent:hover:not([aria-disabled="true"]) { background: var(--color-action-hover); }
+    .btn--filled-accent[aria-disabled="true"] {
+      background: var(--color-surface-muted);
+      color: var(--color-text-disabled);
+      cursor: not-allowed;
+    }
+
+    .btn--ghost-accent {
+      background: transparent;
+      color: var(--color-action-text-on-light);
+      border-color: var(--color-action-default);
+      padding: var(--btn-padding);
+    }
+    .btn--ghost-accent:hover { background: var(--color-action-subtle); }
+
+    .btn--full { width: 100%; }
+
+    /* ── Add-to-cart wrap ── */
+    .add-to-cart-wrap { display: flex; flex-direction: column; gap: var(--space-gap-sm); }
+    .add-to-cart__reason {
+      font-size: var(--font-size-body-sm);
+      color: var(--color-text-tertiary);
+      text-align: center;
+      display: none;
+    }
+    .add-to-cart__reason--visible { display: block; }
+
+    /* ── Sold out notice ── */
+    .soldout-notice {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-gap-md);
+      background: var(--color-surface-muted);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-component);
+      padding: var(--space-component-padding-md);
+      text-align: center;
+    }
+    .soldout-notice__msg {
+      font-size: var(--font-size-body-sm);
+      color: var(--color-text-secondary);
+    }
+
+    /* ── SKU line ── */
+    .product-sku {
+      font-size: var(--font-size-body-sm);
+      color: var(--color-text-tertiary);
+    }
+
+    /* ── Tabs ── */
+    .tabs__tablist {
+      display: flex;
+      border-bottom: 1px solid var(--color-border-default);
+      margin-bottom: var(--space-inset-xl);
+      gap: 0;
+    }
+    .tabs__tab {
+      padding: var(--space-gap-md) var(--space-gap-lg);
+      font-size: var(--tab-font-size);
+      font-weight: var(--font-weight-medium);
+      color: var(--tab-color-inactive);
+      background: transparent;
+      border: none;
+      border-bottom: var(--tab-indicator-height) solid transparent;
+      margin-bottom: -1px;
+      cursor: pointer;
+      transition: color var(--transition-fast), border-color var(--transition-fast);
+    }
+    .tabs__tab:hover { color: var(--color-text-primary); }
+    .tabs__tab[aria-selected="true"] {
+      color: var(--tab-color-active);
+      font-weight: var(--tab-font-weight-active);
+      border-bottom-color: var(--tab-indicator-color);
+    }
+    .tabs__tab:focus-visible { outline: 2px solid var(--color-action-default); outline-offset: -2px; }
+
+    .tabs__panel { display: none; }
+    .tabs__panel[aria-hidden="false"] { display: block; }
+
+    /* ── FeatureList ── */
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-gap-md);
+      max-width: 560px;
+    }
+    .feature-list__item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-gap-md);
+      font-size: var(--font-size-body);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-body);
+    }
+    .feature-list__dot {
+      flex-shrink: 0;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-action-default);
+      margin-top: 0.55em;
+    }
+
+    /* ── SpecTable ── */
+    .spec-table {
+      width: 100%;
+      max-width: 480px;
+      border-collapse: collapse;
+      font-size: var(--font-size-body-sm);
+    }
+    .spec-table caption {
+      position: absolute; width: 1px; height: 1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
+    }
+    .spec-table tr { border-bottom: var(--spec-table-row-border); }
+    .spec-table tr:last-child { border-bottom: none; }
+    .spec-table th {
+      text-align: left;
+      padding: var(--space-gap-md) var(--space-layout-gap) var(--space-gap-md) 0;
+      font-weight: var(--font-weight-medium);
+      color: var(--spec-label-color);
+      width: 42%;
+    }
+    .spec-table td {
+      padding: var(--space-gap-md) 0;
+      color: var(--spec-value-color);
+      font-weight: var(--font-weight-medium);
+    }
+
+    /* ── RichText ── */
+    .rich-text {
+      font-size: var(--font-size-body);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-body);
+      max-width: 600px;
+    }
+    .rich-text p + p { margin-top: var(--space-layout-gap); }
+
+    /* ── Toast ── */
+    .toast-container {
+      position: fixed;
+      bottom: var(--space-layout-gap-lg);
+      right: var(--space-layout-gap-lg);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-gap-sm);
+      pointer-events: none;
+    }
+    .toast {
+      background: var(--color-surface-inverse);
+      color: var(--color-text-inverse);
+      padding: var(--space-component-padding-md);
+      border-radius: var(--radius-component);
+      font-size: var(--font-size-body-sm);
+      font-weight: var(--font-weight-medium);
+      box-shadow: var(--shadow-lg);
+      max-width: 320px;
+      animation: toast-in var(--transition-spring) forwards;
+    }
+    @keyframes toast-in {
+      from { transform: translateY(0.75rem); opacity: 0; }
+      to   { transform: translateY(0);       opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Main navigation">
+  <a href="#" class="site-nav__logo">Arcturus Boards</a>
+  <ul class="site-nav__links" role="list">
+    <li><a href="#">Snowboards</a></li>
+    <li><a href="#">Bindings</a></li>
+    <li><a href="#">Apparel</a></li>
+    <li><a href="#">Sale</a></li>
+  </ul>
+</nav>
+
+<div id="app"></div>
+<div class="toast-container" id="toast" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+// ═══════════════════════════════
+// DATA
+// ═══════════════════════════════
+
+const product = {
+  id: "prod-001",
+  name: "Powder Ghost 2025",
+  vendor: "Arcturus Boards",
+  tagline: "Built for deep snow. Demands nothing less.",
+  description: "The Powder Ghost is a directional freeride board with a tapered nose, setback stance, and a camber-rocker-camber profile that floats effortlessly in deep powder while keeping edge hold on variable hardpack.\n\nEngineered for riders who chase untracked lines, the Ghost rewards commitment. Aggressive enough for high-speed charges, forgiving enough for long days in variable conditions.",
+  price: { regular: 649, sale: 499, currency: "USD" },
+  badges: ["sale", "staff_pick"],
+  images: [
+    { slug: "top-sheet-view", alt: "Powder Ghost snowboard, top sheet view"    },
+    { slug: "base-view",      alt: "Powder Ghost snowboard, base view"          },
+    { slug: "nose-detail",    alt: "Powder Ghost nose and graphics detail"      }
+  ],
+  variants: [
+    { id: "v-150", label: "150", unit: "cm", in_stock: true,  price_delta: null },
+    { id: "v-154", label: "154", unit: "cm", in_stock: true,  price_delta: null },
+    { id: "v-157", label: "157", unit: "cm", in_stock: true,  price_delta: null },
+    { id: "v-160", label: "160", unit: "cm", in_stock: false, price_delta: null },
+    { id: "v-163", label: "163", unit: "cm", in_stock: true,  price_delta: 20   }
+  ],
+  variant_axis: { name: "Length", unit: "cm" },
+  specs: [
+    { label: "Profile",       value: "Camber / Rocker / Camber" },
+    { label: "Shape",         value: "Directional tapered"      },
+    { label: "Flex",          value: "7 / 10 — Stiff"           },
+    { label: "Base",          value: "Sintered 4000"            },
+    { label: "Binding mount", value: "4x4 / 2x4"               }
+  ],
+  features: [
+    "Tapered nose for effortless float in deep powder",
+    "Camber-rocker-camber profile for pop and edge hold on hardpack",
+    "Sintered 4000 base — fast, durable, easy to tune",
+    "Setback stance for a natural powder surfing feel",
+    "Carbon fiber stringers reduce weight without sacrificing stiffness"
+  ],
+  in_stock: true,
+  sku: "ARCTURUS-PG25"
+};
+
+// ═══════════════════════════════
+// STATE
+// ═══════════════════════════════
+
+const state = {
+  selectedVariantId: null,
+  activeImageIndex: 0,
+  activeTab: "description"
+};
+
+// ═══════════════════════════════
+// HELPERS
+// ═══════════════════════════════
+
+function selectedVariant() {
+  return product.variants.find(v => v.id === state.selectedVariantId) || null;
+}
+
+function fmt(amount) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency", currency: product.price.currency, maximumFractionDigits: 0
+  }).format(amount);
+}
+
+function esc(str) {
+  return String(str)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+// Placehold.co URL — bg/fg match --primitive-gray-200 (#e3e3e3) / user-specified #1a1a1a
+function imgUrl(img, size) {
+  return `https://placehold.co/${size || "800x800"}/e3e3e3/1a1a1a?text=${encodeURIComponent(img.slug)}`;
+}
+
+// ═══════════════════════════════
+// COMPONENT BUILDERS
+// ═══════════════════════════════
+
+function buildGallery() {
+  const img = product.images[state.activeImageIndex];
+  const multiImg = product.images.length > 1;
+
+  const strip = multiImg ? `
+    <div class="gallery__strip">
+      ${product.images.map((im, i) => `
+        <button
+          type="button"
+          class="gallery__thumb${i === state.activeImageIndex ? " gallery__thumb--active" : ""}"
+          data-thumb="${i}"
+          aria-label="View image ${i + 1}: ${esc(im.alt)}"
+          aria-pressed="${i === state.activeImageIndex}"
+        ><img src="${imgUrl(im, "128x128")}" alt="${esc(im.alt)}"></button>
+      `).join("")}
+    </div>` : "";
+
+  return `
+    <div class="gallery">
+      <div class="gallery__primary" id="gallery-primary" role="img" aria-label="${esc(img.alt)}">
+        <img src="${imgUrl(img)}" alt="${esc(img.alt)}" id="gallery-primary-img">
+      </div>
+      ${strip}
+    </div>`;
+}
+
+function buildBadges() {
+  const labels = {
+    sale: "Sale", new: "New", sold_out: "Sold Out",
+    best_seller: "Best Seller", staff_pick: "Staff Pick"
+  };
+  return product.badges
+    .map(b => `<span class="badge badge--${esc(b)}">${labels[b] || esc(b)}</span>`)
+    .join("");
+}
+
+function buildProductMeta() {
+  return `
+    <div class="product-meta">
+      <p class="product-meta__vendor">${esc(product.vendor)}</p>
+      <h1 class="product-meta__name">${esc(product.name)}</h1>
+      <p class="product-meta__tagline">${esc(product.tagline)}</p>
+      ${product.badges.length ? `<div class="product-meta__badges">${buildBadges()}</div>` : ""}
+    </div>`;
+}
+
+function buildPriceBlock() {
+  const v = selectedVariant();
+  const hasSale = product.price.sale !== null;
+  const base = hasSale ? product.price.sale : product.price.regular;
+  const total = (v && v.price_delta) ? base + v.price_delta : base;
+
+  let html = `<div class="price-block">`;
+  if (hasSale) {
+    html += `<span class="price-block__sale" aria-label="Sale price ${fmt(total)}">${fmt(total)}</span>`;
+    html += `<span class="price-block__regular price-block__regular--struck" aria-label="Regular price ${fmt(product.price.regular)}">${fmt(product.price.regular)}</span>`;
+  } else {
+    html += `<span class="price-block__regular" aria-label="Price ${fmt(total)}">${fmt(total)}</span>`;
+  }
+  if (v && v.price_delta) {
+    const sign = v.price_delta > 0 ? "+" : "";
+    html += `<span class="price-block__delta">${sign}${fmt(v.price_delta)} for this size</span>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+function buildVariantSelector() {
+  const axis = product.variant_axis;
+  const v = selectedVariant();
+
+  return `
+    <fieldset class="variant-selector">
+      <legend class="variant-selector__legend">
+        ${esc(axis.name)}
+        <span class="variant-selector__legend-note">(${esc(axis.unit)})</span>
+        ${v ? `<span class="variant-selector__legend-note"> — ${esc(v.label)}</span>` : ""}
+      </legend>
+      <ul class="variant-selector__options" role="list">
+        ${product.variants.map(va => `
+          <li class="variant-option${!va.in_stock ? " variant-option--oos" : ""}" role="listitem">
+            <input
+              type="radio"
+              class="variant-option__input"
+              id="var-${esc(va.id)}"
+              name="variant"
+              value="${esc(va.id)}"
+              ${va.id === state.selectedVariantId ? "checked" : ""}
+              ${!va.in_stock ? 'disabled aria-disabled="true"' : ""}
+              aria-label="${esc(va.label)} ${esc(axis.unit)}${!va.in_stock ? " (sold out)" : ""}"
+            />
+            <label class="variant-option__label" for="var-${esc(va.id)}">${esc(va.label)}</label>
+          </li>`).join("")}
+      </ul>
+      <span class="oos-inline${v && !v.in_stock ? " oos-inline--visible" : ""}" role="alert" id="oos-notice">
+        ${v && !v.in_stock ? "This size is out of stock" : ""}
+      </span>
+    </fieldset>`;
+}
+
+function buildAddToCart() {
+  const v = selectedVariant();
+  const disabled = !v || !v.in_stock;
+  let reason = "";
+  if (!v) reason = "Select a size to continue";
+  else if (!v.in_stock) reason = "This size is out of stock";
+
+  return `
+    <div class="add-to-cart-wrap">
+      <button
+        type="button"
+        id="add-to-cart"
+        class="btn btn--filled-accent btn--full"
+        aria-disabled="${disabled}"
+        ${disabled ? 'aria-describedby="atc-reason"' : ""}
+      >${v && !v.in_stock ? "Out of Stock" : "Add to Cart"}</button>
+      <span
+        id="atc-reason"
+        class="add-to-cart__reason${reason ? " add-to-cart__reason--visible" : ""}"
+      >${esc(reason)}</span>
+    </div>`;
+}
+
+function buildTabs() {
+  const tabs = [
+    { id: "description", label: "Description", show: !!product.description },
+    { id: "features",    label: "Features",    show: product.features.length > 0 },
+    { id: "specs",       label: "Specs",       show: product.specs.length > 0 }
+  ].filter(t => t.show);
+
+  if (tabs.length === 0) return "";
+
+  const tablist = `
+    <div class="tabs__tablist" role="tablist" aria-label="Product information">
+      ${tabs.map(t => `
+        <button
+          type="button"
+          role="tab"
+          class="tabs__tab"
+          id="tab-${t.id}"
+          data-tab="${t.id}"
+          aria-selected="${t.id === state.activeTab}"
+          aria-controls="panel-${t.id}"
+        >${esc(t.label)}</button>`).join("")}
+    </div>`;
+
+  const panels = `
+    <div role="tabpanel" id="panel-description" aria-labelledby="tab-description" class="tabs__panel" aria-hidden="${state.activeTab !== "description"}">
+      <div class="rich-text">
+        ${product.description.split("\n\n").map(p => `<p>${esc(p)}</p>`).join("")}
+      </div>
+    </div>
+
+    <div role="tabpanel" id="panel-features" aria-labelledby="tab-features" class="tabs__panel" aria-hidden="${state.activeTab !== "features"}">
+      <ul class="feature-list">
+        ${product.features.map(f => `
+          <li class="feature-list__item">
+            <span class="feature-list__dot" aria-hidden="true"></span>
+            ${esc(f)}
+          </li>`).join("")}
+      </ul>
+    </div>
+
+    <div role="tabpanel" id="panel-specs" aria-labelledby="tab-specs" class="tabs__panel" aria-hidden="${state.activeTab !== "specs"}">
+      <table class="spec-table">
+        <caption>Product specifications</caption>
+        <tbody>
+          ${product.specs.map(s => `
+            <tr>
+              <th scope="row">${esc(s.label)}</th>
+              <td>${esc(s.value)}</td>
+            </tr>`).join("")}
+        </tbody>
+      </table>
+    </div>`;
+
+  return `<div class="tabs">${tablist}${panels}</div>`;
+}
+
+function buildSummaryRight() {
+  return `
+    <div class="product-summary">
+      ${buildProductMeta()}
+      <div class="divider"></div>
+      <div id="price-block-container">${buildPriceBlock()}</div>
+      <div id="variant-selector-container">${buildVariantSelector()}</div>
+      <div id="add-to-cart-container">
+        ${product.in_stock
+          ? buildAddToCart()
+          : `<div class="soldout-notice" role="status">
+               <p class="soldout-notice__msg">This product is currently out of stock.</p>
+               <button type="button" class="btn btn--ghost-accent">Notify me when available</button>
+             </div>`}
+      </div>
+      <p class="product-sku">SKU: ${esc(product.sku)}</p>
+    </div>`;
+}
+
+// ═══════════════════════════════
+// RENDER
+// ═══════════════════════════════
+
+function render() {
+  document.getElementById("app").innerHTML = `
+    <div class="layout-product">
+      <nav aria-label="Breadcrumb" class="breadcrumb">
+        <a href="#">Shop</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <a href="#">Snowboards</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <span class="breadcrumb__current" aria-current="page">${esc(product.name)}</span>
+      </nav>
+
+      <div class="layout-product__main">
+        <div class="layout-product__gallery-col">
+          ${buildGallery()}
+        </div>
+        ${buildSummaryRight()}
+      </div>
+
+      <div class="layout-product__below">
+        ${buildTabs()}
+      </div>
+    </div>`;
+
+  bindEvents();
+}
+
+// ═══════════════════════════════
+// EVENTS — bound once after render()
+// ═══════════════════════════════
+
+function bindEvents() {
+
+  // Variant change — delegated on #app so it survives container innerHTML swaps
+  document.getElementById("app").addEventListener("change", e => {
+    const input = e.target.closest("[name='variant']");
+    if (!input) return;
+    state.selectedVariantId = input.value;
+    document.getElementById("price-block-container").innerHTML    = buildPriceBlock();
+    document.getElementById("variant-selector-container").innerHTML = buildVariantSelector();
+    document.getElementById("add-to-cart-container").innerHTML    = buildAddToCart();
+  });
+
+  // Add to cart — delegated on #app so it survives add-to-cart-container swap
+  document.getElementById("app").addEventListener("click", e => {
+    const btn = e.target.closest("#add-to-cart");
+    if (!btn || btn.getAttribute("aria-disabled") === "true") return;
+    const v = selectedVariant();
+    showToast(`Added to cart: ${product.name} — ${v.label} ${product.variant_axis.unit}`);
+  });
+
+  // Gallery thumbnails — targeted attribute + src updates, no container swap
+  document.querySelectorAll(".gallery__thumb").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.activeImageIndex = parseInt(btn.dataset.thumb, 10);
+      const img = product.images[state.activeImageIndex];
+
+      const primaryImg = document.getElementById("gallery-primary-img");
+      if (primaryImg) {
+        primaryImg.src = imgUrl(img);
+        primaryImg.alt = img.alt;
+      }
+      const primary = document.getElementById("gallery-primary");
+      if (primary) primary.setAttribute("aria-label", img.alt);
+
+      document.querySelectorAll(".gallery__thumb").forEach((t, i) => {
+        const active = i === state.activeImageIndex;
+        t.classList.toggle("gallery__thumb--active", active);
+        t.setAttribute("aria-pressed", active);
+      });
+    });
+  });
+
+  // Tabs — targeted aria attribute updates only, no DOM replacement
+  document.querySelectorAll(".tabs__tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      state.activeTab = tab.dataset.tab;
+      document.querySelectorAll(".tabs__tab").forEach(t => {
+        t.setAttribute("aria-selected", t.dataset.tab === state.activeTab);
+      });
+      document.querySelectorAll(".tabs__panel").forEach(p => {
+        p.setAttribute("aria-hidden", p.id !== `panel-${state.activeTab}`);
+      });
+    });
+
+    tab.addEventListener("keydown", e => {
+      const tabs = [...document.querySelectorAll(".tabs__tab")];
+      const i = tabs.indexOf(tab);
+      if (e.key === "ArrowRight") { e.preventDefault(); tabs[(i + 1) % tabs.length].focus(); }
+      if (e.key === "ArrowLeft")  { e.preventDefault(); tabs[(i - 1 + tabs.length) % tabs.length].focus(); }
+    });
+  });
+}
+
+// ═══════════════════════════════
+// TOAST
+// ═══════════════════════════════
+
+function showToast(msg) {
+  const container = document.getElementById("toast");
+  const el = document.createElement("div");
+  el.className = "toast";
+  el.textContent = msg;
+  container.appendChild(el);
+  setTimeout(() => {
+    el.style.transition = "opacity 160ms ease, transform 160ms ease";
+    el.style.opacity = "0";
+    el.style.transform = "translateY(0.5rem)";
+    setTimeout(() => el.remove(), 200);
+  }, 2800);
+}
+
+// ═══════════════════════════════
+// INIT
+// ═══════════════════════════════
+
+(function init() {
+  const firstInStock = product.variants.find(v => v.in_stock);
+  if (firstInStock) state.selectedVariantId = firstInStock.id;
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,282 @@
+/*
+  Design tokens — Product page
+  Shopify-inspired: clean, neutral, high-contrast, generous whitespace.
+
+  Structure:
+    1. Primitive tokens  — raw values, never used directly in components
+    2. Semantic tokens   — named by purpose, reference primitives
+    3. Component tokens  — scoped overrides for specific components
+
+  To retheme: change primitive values only.
+  Semantic and component tokens update automatically.
+*/
+
+:root {
+
+  /* ─────────────────────────────────────────────────────
+     1. PRIMITIVE TOKENS
+     Raw scale values. Do not use these in components.
+  ───────────────────────────────────────────────────── */
+
+  /* Color — neutrals */
+  --primitive-black:       #0a0a0a;
+  --primitive-gray-950:    #111111;
+  --primitive-gray-900:    #1a1a1a;
+  --primitive-gray-800:    #2d2d2d;
+  --primitive-gray-700:    #4a4a4a;
+  --primitive-gray-500:    #737373;
+  --primitive-gray-400:    #9e9e9e;
+  --primitive-gray-300:    #c4c4c4;
+  --primitive-gray-200:    #e3e3e3;
+  --primitive-gray-150:    #ebebeb;
+  --primitive-gray-100:    #f4f4f4;
+  --primitive-gray-50:     #fafafa;
+  --primitive-white:       #ffffff;
+
+  /* Color — accent (Shopify green-leaning teal) */
+  --primitive-accent-900:  #003d2e;
+  --primitive-accent-700:  #00573f;
+  --primitive-accent-500:  #008060;
+  --primitive-accent-400:  #1a9973;
+  --primitive-accent-200:  #c2ede1;
+  --primitive-accent-100:  #e6f6f1;
+  --primitive-accent-50:   #f3fbf8;
+
+  /* Color — feedback: success */
+  --primitive-green-700:   #166534;
+  --primitive-green-500:   #16a34a;
+  --primitive-green-100:   #dcfce7;
+
+  /* Color — feedback: danger */
+  --primitive-red-700:     #991b1b;
+  --primitive-red-500:     #dc2626;
+  --primitive-red-100:     #fee2e2;
+
+  /* Color — feedback: warning */
+  --primitive-amber-700:   #92400e;
+  --primitive-amber-500:   #d97706;
+  --primitive-amber-100:   #fef3c7;
+
+  /* Spacing — 4pt base grid */
+  --primitive-space-1:     0.25rem;   /*  4px */
+  --primitive-space-2:     0.5rem;    /*  8px */
+  --primitive-space-3:     0.75rem;   /* 12px */
+  --primitive-space-4:     1rem;      /* 16px */
+  --primitive-space-5:     1.25rem;   /* 20px */
+  --primitive-space-6:     1.5rem;    /* 24px */
+  --primitive-space-8:     2rem;      /* 32px */
+  --primitive-space-10:    2.5rem;    /* 40px */
+  --primitive-space-12:    3rem;      /* 48px */
+  --primitive-space-16:    4rem;      /* 64px */
+
+  /* Border radius */
+  --primitive-radius-none: 0;
+  --primitive-radius-xs:   2px;
+  --primitive-radius-sm:   4px;
+  --primitive-radius-md:   8px;
+  --primitive-radius-lg:   12px;
+  --primitive-radius-xl:   16px;
+  --primitive-radius-full: 9999px;
+
+  /* Typography — type scale */
+  --primitive-font-size-xs:   0.75rem;   /* 12px */
+  --primitive-font-size-sm:   0.875rem;  /* 14px */
+  --primitive-font-size-md:   1rem;      /* 16px */
+  --primitive-font-size-lg:   1.125rem;  /* 18px */
+  --primitive-font-size-xl:   1.25rem;   /* 20px */
+  --primitive-font-size-2xl:  1.5rem;    /* 24px */
+  --primitive-font-size-3xl:  1.875rem;  /* 30px */
+  --primitive-font-size-4xl:  2.25rem;   /* 36px */
+
+  /* Typography — weight */
+  --primitive-font-weight-regular: 400;
+  --primitive-font-weight-medium:  500;
+  --primitive-font-weight-semibold:600;
+  --primitive-font-weight-bold:    700;
+
+  /* Typography — line height */
+  --primitive-line-height-tight:  1.15;
+  --primitive-line-height-snug:   1.35;
+  --primitive-line-height-normal: 1.6;
+  --primitive-line-height-loose:  1.75;
+
+  /* Shadows */
+  --primitive-shadow-xs:  0 1px 2px rgba(0,0,0,0.06);
+  --primitive-shadow-sm:  0 1px 4px rgba(0,0,0,0.08);
+  --primitive-shadow-md:  0 4px 12px rgba(0,0,0,0.10);
+  --primitive-shadow-lg:  0 8px 24px rgba(0,0,0,0.12);
+
+  /* Motion */
+  --primitive-duration-fast:   100ms;
+  --primitive-duration-base:   160ms;
+  --primitive-duration-slow:   260ms;
+  --primitive-easing-default:  cubic-bezier(0.25, 0.1, 0.25, 1);
+  --primitive-easing-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
+
+
+  /* ─────────────────────────────────────────────────────
+     2. SEMANTIC TOKENS
+     Purpose-named. Always reference primitives.
+     Use these in all components.
+  ───────────────────────────────────────────────────── */
+
+  /* --- Color: action / interactive --- */
+  --color-action-default:       var(--primitive-accent-500);
+  --color-action-hover:         var(--primitive-accent-700);
+  --color-action-active:        var(--primitive-accent-900);
+  --color-action-subtle:        var(--primitive-accent-100);
+  --color-action-subtle-hover:  var(--primitive-accent-200);
+  --color-action-text:          var(--primitive-white);
+  --color-action-text-on-light: var(--primitive-accent-500);
+
+  /* --- Color: surface --- */
+  --color-surface-page:         var(--primitive-white);
+  --color-surface-default:      var(--primitive-white);
+  --color-surface-raised:       var(--primitive-white);
+  --color-surface-overlay:      var(--primitive-white);
+  --color-surface-subtle:       var(--primitive-gray-50);
+  --color-surface-muted:        var(--primitive-gray-100);
+  --color-surface-inverse:      var(--primitive-gray-900);
+
+  /* --- Color: border --- */
+  --color-border-default:       var(--primitive-gray-200);
+  --color-border-strong:        var(--primitive-gray-300);
+  --color-border-focus:         var(--primitive-accent-500);
+  --color-border-inverse:       var(--primitive-gray-700);
+
+  /* --- Color: text --- */
+  --color-text-primary:         var(--primitive-gray-900);
+  --color-text-secondary:       var(--primitive-gray-700);
+  --color-text-tertiary:        var(--primitive-gray-500);
+  --color-text-disabled:        var(--primitive-gray-400);
+  --color-text-inverse:         var(--primitive-white);
+  --color-text-link:            var(--primitive-accent-500);
+  --color-text-link-hover:      var(--primitive-accent-700);
+
+  /* --- Color: feedback --- */
+  --color-success-default:      var(--primitive-green-500);
+  --color-success-surface:      var(--primitive-green-100);
+  --color-success-text:         var(--primitive-green-700);
+  --color-danger-default:       var(--primitive-red-500);
+  --color-danger-surface:       var(--primitive-red-100);
+  --color-danger-text:          var(--primitive-red-700);
+  --color-warning-default:      var(--primitive-amber-500);
+  --color-warning-surface:      var(--primitive-amber-100);
+  --color-warning-text:         var(--primitive-amber-700);
+
+  /* --- Spacing --- */
+  --space-component-padding-xs: var(--primitive-space-1) var(--primitive-space-2);
+  --space-component-padding-sm: var(--primitive-space-2) var(--primitive-space-3);
+  --space-component-padding-md: var(--primitive-space-3) var(--primitive-space-4);
+  --space-component-padding-lg: var(--primitive-space-4) var(--primitive-space-6);
+  --space-layout-gap:           var(--primitive-space-4);
+  --space-layout-gap-lg:        var(--primitive-space-6);
+  --space-section-gap:          var(--primitive-space-10);
+
+  --space-gap-xs:               var(--primitive-space-1);   /*  4px — tight inline gap */
+  --space-gap-sm:               var(--primitive-space-2);   /*  8px — default component gap */
+  --space-gap-md:               var(--primitive-space-3);   /* 12px — relaxed component gap */
+  --space-gap-lg:               var(--primitive-space-5);   /* 20px — loose component gap */
+  --space-inset-xl:             var(--primitive-space-8);   /* 32px — page-level inset */
+  --space-inset-2xl:            var(--primitive-space-12);  /* 48px — section inset */
+  --space-inset-3xl:            var(--primitive-space-16);  /* 64px — page bottom padding */
+
+  /* --- Radius --- */
+  --radius-sm:                  var(--primitive-radius-sm);  /*  4px — tags, small elements */
+  --radius-component:           var(--primitive-radius-md);
+  --radius-surface:             var(--primitive-radius-lg);
+  --radius-pill:                var(--primitive-radius-full);
+
+  /* --- Typography --- */
+  --font-family-base:           -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-mono:           'SF Mono', 'Fira Code', monospace;
+
+  --font-size-body:             var(--primitive-font-size-md);
+  --font-size-body-sm:          var(--primitive-font-size-sm);
+  --font-size-body-xs:          var(--primitive-font-size-xs);
+  --font-size-heading-xs:       var(--primitive-font-size-md);
+  --font-size-heading-sm:       var(--primitive-font-size-lg);
+  --font-size-heading-md:       var(--primitive-font-size-xl);
+  --font-size-heading-lg:       var(--primitive-font-size-2xl);
+  --font-size-heading-xl:       var(--primitive-font-size-3xl);
+  --font-size-display:          var(--primitive-font-size-4xl);
+
+  --font-weight-regular:        var(--primitive-font-weight-regular);
+  --font-weight-medium:         var(--primitive-font-weight-medium);
+  --font-weight-semibold:       var(--primitive-font-weight-semibold);
+  --font-weight-bold:           var(--primitive-font-weight-bold);
+
+  --line-height-heading:        var(--primitive-line-height-tight);
+  --line-height-body:           var(--primitive-line-height-normal);
+
+  /* --- Shadow --- */
+  --shadow-xs:                  var(--primitive-shadow-xs);
+  --shadow-sm:                  var(--primitive-shadow-sm);
+  --shadow-md:                  var(--primitive-shadow-md);
+  --shadow-lg:                  var(--primitive-shadow-lg);
+
+  /* --- Motion --- */
+  --transition-base:            var(--primitive-duration-base) var(--primitive-easing-default);
+  --transition-fast:            var(--primitive-duration-fast) var(--primitive-easing-default);
+  --transition-slow:            var(--primitive-duration-slow) var(--primitive-easing-default);
+  --transition-spring:          var(--primitive-duration-base) var(--primitive-easing-spring);
+
+
+  /* ─────────────────────────────────────────────────────
+     3. COMPONENT TOKENS
+     Scoped to specific components. Reference semantic tokens.
+     Override here when a component needs a different default
+     without changing the semantic intent globally.
+  ───────────────────────────────────────────────────── */
+
+  /* Button */
+  --btn-font-size:              var(--font-size-body);
+  --btn-font-weight:            var(--font-weight-semibold);
+  --btn-radius:                 var(--radius-component);
+  --btn-padding:                var(--space-component-padding-md);
+  --btn-padding-lg:             var(--space-component-padding-lg);
+  --btn-transition:             var(--transition-fast);
+
+  /* Badge */
+  --badge-font-size:            var(--font-size-body-xs);
+  --badge-font-weight:          var(--font-weight-semibold);
+  --badge-radius:               var(--radius-pill);
+  --badge-padding:              var(--space-component-padding-xs);
+
+  /* VariantOption (swatch-style selector buttons) */
+  --variant-option-size:        2.75rem;
+  --variant-option-radius:      var(--radius-component);
+  --variant-option-border:      1.5px solid var(--color-border-default);
+  --variant-option-border-selected: 2px solid var(--color-action-default);
+  --variant-option-bg:          var(--color-surface-default);
+  --variant-option-bg-oos:      var(--color-surface-muted);   /* out-of-stock */
+  --variant-option-color-oos:   var(--color-text-disabled);
+
+  /* ImageGallery */
+  --gallery-radius:             var(--radius-surface);
+  --gallery-thumb-size:         4rem;
+  --gallery-thumb-radius:       var(--radius-sm);
+  --gallery-thumb-border-active: 2px solid var(--color-action-default);
+
+  /* PriceBlock */
+  --price-sale-color:           var(--color-danger-default);
+  --price-sale-size:            var(--font-size-heading-lg);
+  --price-regular-color:        var(--color-text-primary);
+  --price-regular-size:         var(--font-size-heading-md);
+  --price-struck-color:         var(--color-text-tertiary);
+  --price-delta-size:           var(--font-size-body-sm);
+  --price-delta-color:          var(--color-text-secondary);
+
+  /* Tabs */
+  --tab-indicator-height:       2px;
+  --tab-indicator-color:        var(--color-action-default);
+  --tab-font-size:              var(--font-size-body);
+  --tab-font-weight-active:     var(--font-weight-semibold);
+  --tab-color-active:           var(--color-text-primary);
+  --tab-color-inactive:         var(--color-text-secondary);
+
+  /* SpecTable */
+  --spec-table-row-border:      1px solid var(--color-border-default);
+  --spec-label-color:           var(--color-text-secondary);
+  --spec-value-color:           var(--color-text-primary);
+}

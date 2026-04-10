@@ -1,0 +1,58 @@
+{
+  "entity": "Product",
+  "intent": "view",
+  "description": "Surface a purchasable product with selectable variants. Primary goal: get the user to resolve a variant and commit to the primary action.",
+
+  "content_slots": {
+    "attribution":          "product.vendor",
+    "identity":             "product.name",
+    "tagline":              "product.tagline",
+    "status_signals":       "product.badges",
+    "media":                "product.images",
+    "price_display":        "product.price.regular + product.price.currency — sale price from product.price.sale when present; variant delta from selected_variant.price_delta when present",
+    "variant_selection":    "product.variants — axis label and unit from product.variant_axis; selection resolves availability_status, price_display delta, and primary_action eligibility",
+    "availability_status":  "product.in_stock — resolved against selected_variant.in_stock when a variant is selected",
+    "primary_action":       "add to cart — commits product.id + selected_variant.id to basket",
+    "narrative":            "product.description",
+    "benefit_list":         "product.features",
+    "technical_attributes": "product.specs"
+  },
+
+  "rules": {
+    "default selected variant":
+      "first variant in product.variants where in_stock === true; no default if all variants are out of stock",
+
+    "if product.price.sale is not null":
+      "activate sale signal on price_display — sale price is primary, base price is secondary",
+
+    "if product.price.sale is not null AND 'sale' not in product.badges":
+      "inject 'sale' into status_signals",
+
+    "if selected_variant.price_delta is not null":
+      "surface delta as a modifier on price_display — additive if positive, subtractive if negative",
+
+    "if variant_selection is unresolved":
+      "suppress primary_action",
+
+    "if selected_variant.in_stock === false":
+      "suppress primary_action; surface availability_status with out-of-stock signal scoped to the selected variant",
+
+    "if product.in_stock === false":
+      "suppress primary_action entirely; surface availability_status at product level — variant-level signals are irrelevant",
+
+    "if product.images is empty":
+      "omit media slot",
+
+    "if product.images.length === 1":
+      "omit thumbnail navigation within media — single image only",
+
+    "if product.description is empty":
+      "omit narrative slot",
+
+    "if product.features is empty":
+      "omit benefit_list slot",
+
+    "if product.specs is empty":
+      "omit technical_attributes slot"
+  }
+}

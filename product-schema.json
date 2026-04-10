@@ -1,0 +1,92 @@
+{
+  "entity": "Product",
+  "description": "A purchasable physical product with selectable variants. Channel-agnostic — describes what exists in the domain, not how it is displayed.",
+  "fields": {
+    "id": "string",
+    "name": "string",
+    "vendor": "string",
+    "tagline": "string (max 100 chars)",
+    "description": "string (rich text allowed)",
+    "price": {
+      "regular": "number",
+      "sale": "number | null",
+      "currency": "string (ISO 4217)"
+    },
+    "badges": "enum[]: new | sale | sold_out | best_seller | staff_pick",
+    "images": [
+      {
+        "url": "string",
+        "alt": "string",
+        "is_primary": "boolean"
+      }
+    ],
+    "variants": [
+      {
+        "id": "string",
+        "label": "string",
+        "value": "string | number",
+        "unit": "string | null",
+        "in_stock": "boolean",
+        "price_delta": "number | null (positive = more expensive, negative = cheaper than base)"
+      }
+    ],
+    "variant_axis": {
+      "name": "string (e.g. 'Length')",
+      "unit": "string | null (e.g. 'cm')"
+    },
+    "specs": [
+      {
+        "label": "string",
+        "value": "string"
+      }
+    ],
+    "features": "string[] (3–6 items)",
+    "in_stock": "boolean",
+    "sku": "string"
+  },
+  "example": {
+    "id": "prod-001",
+    "name": "Powder Ghost 2025",
+    "vendor": "Arcturus Boards",
+    "tagline": "Built for deep snow. Demands nothing less.",
+    "description": "The Powder Ghost is a directional freeride board with a tapered nose, setback stance, and a camber-rocker-camber profile that floats effortlessly in deep powder while keeping edge hold on variable hardpack.",
+    "price": {
+      "regular": 649,
+      "sale": 499,
+      "currency": "USD"
+    },
+    "badges": ["sale", "staff_pick"],
+    "images": [
+      { "url": "/images/powder-ghost-main.jpg", "alt": "Powder Ghost snowboard, top sheet view", "is_primary": true },
+      { "url": "/images/powder-ghost-base.jpg", "alt": "Powder Ghost snowboard, base view", "is_primary": false },
+      { "url": "/images/powder-ghost-detail.jpg", "alt": "Powder Ghost nose detail and graphics", "is_primary": false }
+    ],
+    "variants": [
+      { "id": "var-150", "label": "150", "value": 150, "unit": "cm", "in_stock": true, "price_delta": null },
+      { "id": "var-154", "label": "154", "value": 154, "unit": "cm", "in_stock": true, "price_delta": null },
+      { "id": "var-157", "label": "157", "value": 157, "unit": "cm", "in_stock": true, "price_delta": null },
+      { "id": "var-160", "label": "160", "value": 160, "unit": "cm", "in_stock": false, "price_delta": null },
+      { "id": "var-163", "label": "163", "value": 163, "unit": "cm", "in_stock": true, "price_delta": 20 }
+    ],
+    "variant_axis": {
+      "name": "Length",
+      "unit": "cm"
+    },
+    "specs": [
+      { "label": "Profile", "value": "Camber / Rocker / Camber" },
+      { "label": "Shape", "value": "Directional tapered" },
+      { "label": "Flex", "value": "7 / 10 (Stiff)" },
+      { "label": "Base", "value": "Sintered 4000" },
+      { "label": "Binding mount", "value": "4x4 / 2x4" }
+    ],
+    "features": [
+      "Tapered nose for effortless float in deep powder",
+      "Camber-rocker-camber profile for pop and edge hold",
+      "Sintered 4000 base — fast and durable",
+      "Setback stance for natural powder surfing feel",
+      "Carbon fiber stringers reduce weight without sacrificing stiffness"
+    ],
+    "in_stock": true,
+    "sku": "ARCTURUS-PG25"
+  }
+}
